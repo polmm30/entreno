@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- skill:chrome -->
+<style>
+/* Credit line — bottom-right */
+.design-ui-credit {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  font: 11px/1 system-ui, sans-serif;
+  color: rgba(128,128,128,0.5);
+  pointer-events: none;
+  z-index: 2147483647;
+  transition: opacity 0.4s ease;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+
+/* Hide chrome on touch devices */
+@media (hover: none) {
+  .design-ui-credit { display: none; }
+}
+
+/* Print fixes */
+@media print {
+  * {
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+  }
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .design-ui-credit { display: none !important; }
+}
+
+</style>
+<script>
+(function () {
+    // Design-ui pages are single compositions, so the whole body is editable.
+    function markEditable() {
+        document.body.classList.add('artifact-editable');
+    }
+
+    // Credit badge with idle-fade. Hover devices only.
+    function initChromeUI() {
+        if (!matchMedia('(hover: hover)').matches) return;
+
+        var credit = document.createElement('div');
+        credit.className = 'design-ui-credit';
+        credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
+        document.body.appendChild(credit);
+
+        var timer = null;
+        var fade = function (out) { credit.style.opacity = out ? '0' : ''; };
+        fade(true);
+        var show = function () {
+            fade(false);
+            clearTimeout(timer);
+            timer = setTimeout(function () { fade(true); }, 3000);
+        };
+        document.addEventListener('mousemove', show);
+        show();
+    }
+
+    function init() {
+        markEditable();
+        initChromeUI();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+<!-- /skill:chrome -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Proyecto 68kg · Pol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: oklch(24% 0.02 55); --ink-soft: oklch(44% 0.018 55); --ink-faint: oklch(62% 0.015 55);
+    --paper: oklch(97.5% 0.012 75); --paper-2: oklch(99% 0.008 75); --line: oklch(88% 0.015 65);
+    --clay: oklch(64% 0.17 38); --clay-deep: oklch(52% 0.16 36); --clay-tint: oklch(94% 0.04 45);
+    --moss: oklch(58% 0.11 155); --moss-deep: oklch(45% 0.11 155); --moss-tint: oklch(94% 0.05 155);
+    --space-xs: 6px; --space-sm: 12px; --space-md: 20px; --space-lg: 32px; --space-xl: 52px;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.55; padding-bottom: calc(72px + env(safe-area-inset-bottom)); -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  h1, h2, h3 { font-family: 'Bricolage Grotesque', sans-serif; text-wrap: balance; letter-spacing: -0.02em; line-height: 1.05; }
+
+  header { background: var(--clay); color: var(--paper-2); padding: calc(var(--space-lg) + env(safe-area-inset-top)) var(--space-md) var(--space-lg); position: relative; overflow: hidden; }
+  header::after { content: ""; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: oklch(70% 0.16 42 / 0.5); }
+  .eyebrow { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.85; position: relative; z-index: 1; }
+  header h1 { font-size: 2.6rem; font-weight: 800; margin-top: var(--space-xs); position: relative; z-index: 1; }
+  .goal-row { display: flex; align-items: baseline; gap: var(--space-sm); margin-top: var(--space-md); position: relative; z-index: 1; font-variant-numeric: tabular-nums; }
+  .goal-row .from { font-size: 1.4rem; font-weight: 700; opacity: 0.6; text-decoration: line-through; text-decoration-thickness: 2px; }
+  .goal-row .arrow { opacity: 0.7; }
+  .goal-row .to { font-size: 2.3rem; font-weight: 800; }
+  .goal-row .kg { font-size: 1rem; opacity: 0.8; }
+  .deadline { margin-top: var(--space-sm); font-size: 0.9rem; opacity: 0.9; position: relative; z-index: 1; }
+
+  nav { position: sticky; top: 0; z-index: 50; display: flex; gap: 6px; overflow-x: auto; padding: var(--space-sm) var(--space-md); background: oklch(97.5% 0.012 75 / 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  nav::-webkit-scrollbar { display: none; }
+  .tab { flex: 0 0 auto; font-family: 'Bricolage Grotesque', sans-serif; font-size: 0.92rem; font-weight: 600; padding: 9px 16px; border-radius: 11px; border: 1px solid var(--line); background: var(--paper-2); color: var(--ink-soft); cursor: pointer; transition: all 0.2s var(--ease-out); white-space: nowrap; }
+  .tab:hover { border-color: var(--clay); color: var(--clay-deep); }
+  .tab.active { background: var(--ink); color: var(--paper-2); border-color: var(--ink); }
+
+  main { padding: 0 var(--space-md) var(--space-xl); }
+  .view { display: none; animation: rise 0.4s var(--ease-out); }
+  .view.active { display: block; }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .nav-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-faint); margin: var(--space-md) 0 var(--space-xs); }
+  .sub-nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .sub-nav::-webkit-scrollbar { display: none; }
+  .chip { flex: 0 0 auto; font-size: 0.85rem; font-weight: 600; padding: 7px 13px; border-radius: 9px; border: 1px solid var(--line); background: var(--paper-2); color: var(--ink-soft); cursor: pointer; transition: all 0.2s var(--ease-out); white-space: nowrap; }
+  .chip:hover { border-color: var(--clay); }
+  .chip.active { background: var(--clay); color: var(--paper-2); border-color: var(--clay); }
+  .chip.peak.active { background: var(--ink); border-color: var(--ink); }
+  .chip.day.active { background: var(--ink); color: var(--paper-2); border-color: var(--ink); }
+
+  .week-banner { margin-top: var(--space-md); background: var(--clay-tint); border-radius: 14px; padding: 14px var(--space-md); }
+  .week-banner .wb-top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); }
+  .week-banner .wb-title { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--clay-deep); }
+  .week-banner .wb-date { font-size: 0.78rem; font-weight: 600; color: var(--clay-deep); font-variant-numeric: tabular-nums; }
+  .week-banner .wb-focus { font-size: 0.9rem; color: var(--ink); margin-top: 4px; }
+
+  .day-head { margin: var(--space-md) 0 var(--space-sm); display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); }
+  .day-head h2 { font-size: 1.45rem; font-weight: 800; }
+  .day-head .sub { color: var(--ink-faint); font-size: 0.84rem; }
+  .day-tag { font-size: 0.76rem; font-weight: 600; padding: 4px 11px; border-radius: 8px; white-space: nowrap; }
+  .day-tag.rest { background: var(--moss-tint); color: oklch(40% 0.1 155); }
+  .day-tag.work { background: var(--clay-tint); color: var(--clay-deep); }
+
+  ul.ex { list-style: none; display: flex; flex-direction: column; gap: var(--space-sm); }
+  ul.ex li { display: flex; align-items: center; gap: var(--space-sm); padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper-2); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s var(--ease-out), background 0.2s var(--ease-out); }
+  ul.ex li:hover { border-color: var(--clay); }
+  li.done { background: var(--moss-tint); border-color: transparent; }
+  .thumb { flex: 0 0 84px; width: 84px; height: 64px; border-radius: 11px; overflow: hidden; background: var(--clay-tint); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s var(--ease-out); }
+  li.done .thumb img { opacity: 0.55; }
+  .ex-body { flex: 1; min-width: 0; }
+  .ex-name { font-weight: 600; font-size: 1rem; transition: all 0.2s var(--ease-out); }
+  li.done .ex-name { color: var(--ink-faint); text-decoration: line-through; }
+  .ex-vol { display: inline-block; margin-top: 4px; font-size: 0.8rem; font-weight: 600; color: var(--clay-deep); background: var(--clay-tint); padding: 2px 9px; border-radius: 7px; font-variant-numeric: tabular-nums; }
+  li.done .ex-vol { background: transparent; color: var(--moss-deep); }
+  .box { flex: 0 0 26px; width: 26px; height: 26px; margin-right: 4px; border: 2px solid var(--ink-faint); border-radius: 8px; display: grid; place-items: center; transition: all 0.2s var(--ease-out); }
+  .box svg { width: 15px; height: 15px; stroke: var(--paper-2); stroke-width: 3.5; fill: none; opacity: 0; transform: scale(0.5); transition: all 0.2s var(--ease-out); }
+  li.done .box { background: var(--moss); border-color: var(--moss); }
+  li.done .box svg { opacity: 1; transform: scale(1); }
+
+  .train-progress { background: var(--paper-2); border: 1px solid var(--line); border-radius: 14px; padding: var(--space-md); margin-top: var(--space-md); position: sticky; bottom: var(--space-sm); box-shadow: 0 4px 20px oklch(24% 0.02 55 / 0.08); }
+  .train-progress .plabel { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 9px; }
+  .train-progress .pct { font-weight: 700; color: var(--clay-deep); font-variant-numeric: tabular-nums; }
+  .track { height: 9px; background: var(--clay-tint); border-radius: 99px; overflow: hidden; }
+  .fill { height: 100%; width: 0%; background: var(--clay); border-radius: 99px; transition: width 0.5s var(--ease-out); }
+  .reset { margin-top: var(--space-sm); font-size: 0.8rem; color: var(--ink-faint); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 4px; }
+  .reset:hover { color: var(--clay-deep); }
+
+  .meal { padding: var(--space-md) 0; border-bottom: 1px solid var(--line); }
+  .meal:last-child { border-bottom: none; }
+  .meal .when { display: flex; align-items: center; gap: 8px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 1.02rem; }
+  .meal .what { margin-top: 5px; font-size: 0.96rem; color: var(--ink-soft); }
+
+  .targets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin-top: var(--space-md); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .targets div { background: var(--paper-2); padding: 13px 8px; text-align: center; }
+  .targets .n { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--clay-deep); font-variant-numeric: tabular-nums; line-height: 1; }
+  .targets .l { font-size: 0.7rem; color: var(--ink-soft); margin-top: 5px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); margin-top: var(--space-md); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .stats div { background: var(--paper-2); padding: 13px 6px; text-align: center; }
+  .stats .n { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.3rem; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+  .stats .n.now { color: var(--ink); }
+  .stats .n.lost { color: var(--moss-deep); }
+  .stats .n.left { color: var(--clay-deep); }
+  .stats .n.goal { color: var(--ink-faint); }
+  .stats .l { font-size: 0.66rem; color: var(--ink-soft); margin-top: 5px; }
+  .chart-card { margin-top: var(--space-md); background: var(--paper-2); border: 1px solid var(--line); border-radius: 18px; padding: var(--space-md) var(--space-sm) var(--space-sm); }
+  svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+  .legend { display: flex; gap: var(--space-md); justify-content: center; padding: var(--space-sm) 0 4px; font-size: 0.78rem; color: var(--ink-soft); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 16px; height: 3px; border-radius: 2px; display: inline-block; }
+  .swatch.plan { background: var(--ink-faint); }
+  .swatch.real { background: var(--clay); }
+  .log { margin-top: var(--space-md); }
+  .row { display: grid; grid-template-columns: 1fr auto 1fr auto; align-items: center; gap: var(--space-sm); padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .row:last-child { border-bottom: none; }
+  .row .wk { font-weight: 600; font-size: 0.9rem; }
+  .row .wk small { display: block; color: var(--ink-faint); font-weight: 400; font-size: 0.74rem; }
+  .row .target { font-size: 0.78rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; text-align: right; line-height: 1.25; }
+  .row input { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600; width: 100%; padding: 9px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); color: var(--ink); text-align: center; font-variant-numeric: tabular-nums; transition: border-color 0.2s var(--ease-out); -webkit-appearance: none; }
+  .row input::placeholder { color: var(--ink-faint); font-weight: 400; }
+  .row input:focus-visible { outline: none; border-color: var(--clay); box-shadow: 0 0 0 3px var(--clay-tint); }
+  .delta { font-size: 0.8rem; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; min-width: 44px; }
+  .delta.down { color: var(--moss-deep); }
+  .delta.up { color: var(--clay-deep); }
+  .delta.flat { color: var(--ink-faint); }
+
+  .note { margin-top: var(--space-md); background: var(--ink); color: var(--paper); padding: var(--space-md); border-radius: 16px; font-size: 0.92rem; }
+  .note b { color: oklch(80% 0.14 45); }
+
+  footer { text-align: center; padding: var(--space-lg) var(--space-md); color: var(--ink-faint); font-size: 0.85rem; }
+  footer b { color: var(--clay-deep); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Por semana y por día</div>
+    <h1>Proyecto 68kg</h1>
+    <div class="goal-row"><span class="from">73,8</span><span class="arrow">→</span><span class="to">68</span><span class="kg">kg</span></div>
+    <div class="deadline">🎯 Para el 13 de septiembre · elige semana, luego el día</div>
+  </header>
+
+  <nav id="tabs">
+    <button class="tab active" data-view="train">🏋️ Entreno</button>
+    <button class="tab" data-view="diet">🍽️ Dieta</button>
+    <button class="tab" data-view="track">📉 Peso</button>
+  </nav>
+
+  <main>
+    <section class="view active" id="train">
+      <div class="nav-label">Semana</div>
+      <div class="sub-nav" id="tr-week-chips"></div>
+      <div class="nav-label">Día</div>
+      <div class="sub-nav" id="tr-day-chips"></div>
+      <div id="train-content"></div>
+      <div class="train-progress">
+        <div class="plabel"><span id="pcount">Día 1</span><span class="pct" id="ppct">0%</span></div>
+        <div class="track"><div class="fill" id="pfill"></div></div>
+        <button class="reset" id="reset-week">Reiniciar esta semana</button>
+      </div>
+    </section>
+
+    <section class="view" id="diet">
+      <div class="targets">
+        <div><div class="n" id="dt-kcal">~1.950</div><div class="l">kcal/día</div></div>
+        <div><div class="n" id="dt-prot">130g</div><div class="l">proteína</div></div>
+        <div><div class="n">2-2,5L</div><div class="l">agua</div></div>
+      </div>
+      <div class="nav-label">Semana</div>
+      <div class="sub-nav" id="di-week-chips"></div>
+      <div class="nav-label">Día</div>
+      <div class="sub-nav" id="di-day-chips"></div>
+      <div id="diet-content"></div>
+      <div class="note">💡 <b>Cada semana rota el menú</b> y baja un poco las calorías. Sin coliflor ni brócoli. Intercambia comidas entre días si te apetece.</div>
+    </section>
+
+    <section class="view" id="track">
+      <div class="stats">
+        <div><div class="n now" id="s-now">73,8</div><div class="l">Actual (kg)</div></div>
+        <div><div class="n lost" id="s-lost">0,0</div><div class="l">Perdido</div></div>
+        <div><div class="n left" id="s-left">5,8</div><div class="l">Restante</div></div>
+        <div><div class="n goal">68,0</div><div class="l">Meta</div></div>
+      </div>
+      <div class="chart-card">
+        <svg class="chart" viewBox="0 0 620 300" id="chart" preserveAspectRatio="none" aria-label="Gráfico de peso"></svg>
+        <div class="legend"><span><i class="swatch plan"></i> Objetivo</span><span><i class="swatch real"></i> Tu peso real</span></div>
+      </div>
+      <div class="log">
+        <div class="day-head"><h2>Registro semanal</h2></div>
+        <div id="rows"></div>
+        <button class="reset" id="reset-track" style="display:block;margin:var(--space-sm) auto 0;">Borrar registros</button>
+      </div>
+      <div class="note">📉 Pésate el mismo día, en ayunas. <b>0,5-0,8kg/semana</b> es el ritmo perfecto.</div>
+    </section>
+  </main>
+
+  <footer>Constancia &gt; perfección. <b>El entreno esculpe, el déficit adelgaza.</b></footer>
+</div>
+
+<script>
+  const CHECK = '<svg viewBox="0 0 24 24"><polyline points="4 12 9 17 20 6"/></svg>';
+
+  const tabs = document.querySelectorAll('.tab');
+  const views = document.querySelectorAll('.view');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    views.forEach(v => v.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.view).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+    if (t.dataset.view === 'track') renderChart();
+  }));
+
+  // ============ TRAINING ============
+  const weekMeta = [
+    { date:'21-27 jul', focus:'Base. Aprende la técnica limpia y anota tus reps máximas.' },
+    { date:'28 jul-3 ago', focus:'Sube +2 reps por serie y +10s en los isométricos.' },
+    { date:'4-10 ago', focus:'+1 serie en los ejercicios principales.' },
+    { date:'11-17 ago', focus:'Descanso corto (45-60s) entre series y cardio más rápido.' },
+    { date:'18-24 ago', focus:'Variantes difíciles: diamante, dominada lenta, a una pierna.' },
+    { date:'25-31 ago', focus:'+1 serie extra y más cardio en el Día 4.' },
+    { date:'1-7 sep', focus:'Circuitos sin descanso. Máxima intensidad.' },
+    { date:'8-13 sep', focus:'Deload: baja volumen y llega fresco al objetivo.' },
+  ];
+  const days = [
+    { id:'d1', title:'Empuje', sub:'Pecho · hombro · tríceps · Lun', ex:[
+      { name:'Flexiones', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/e64acbf0-bccf-4260-be19-6d0558f0bd9f/generated-image-35aa7d72-7bac-42cb-ba34-482dcc5e2840.png?view=open', w:['4×máx','4×máx','5×máx','5×máx','4×8 diamante','5×8 diamante','circuito 5×máx','4×máx deload'] },
+      { name:'Fondos en silla', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/196396e6-ce73-4245-9100-54c3798fde65/generated-image-7f3570a9-6d75-406b-af2a-b671a696a685.png?view=open', w:['3×10-12','3×12-14','4×12','4×12','3×12 profundos','4×12 profundos','circuito 4×máx','3×12 deload'] },
+      { name:'Pike push-ups', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/01821e3e-037e-43f3-859e-ae0ef8e88d16/generated-image-8bb6e700-7d75-4f00-977e-1fe0297cc6b2.png?view=open', w:['3×8-10','3×10-12','4×10','4×10','3×8 pica alta','4×8 pica alta','circuito 4×máx','3×8 deload'] },
+      { name:'Plancha', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/cce93ff1-4d5b-406d-b676-c9320999fb08/generated-image-fd1383c4-a777-4520-8cb4-0dcb625b51a5.png?view=open', w:['3×40s','3×50s','3×60s','3×60s','3×60s peso','3×70s','circuito 3×máx','3×45s deload'] },
+    ]},
+    { id:'d2', title:'Tirón + core', sub:'Espalda · bíceps · abdomen · Mar', ex:[
+      { name:'Dominadas / remo', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/ea57fe74-12b1-4d01-8f53-f30a76ffb15a/generated-image-e42118bc-3cfa-4d9a-8161-975fb734172e.png?view=open', w:['4×máx','4×máx','5×máx','5×máx','4×5 lentas','5×5 lentas','circuito 5×máx','4×máx deload'] },
+      { name:'Superman', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/7146944a-84da-4d6a-bbfa-275ba1e87d7c/generated-image-715889b3-4c0a-47be-8291-f159e5b8597a.png?view=open', w:['3×15','3×17','4×15','4×15','3×15 pausa 2s','4×15 pausa 2s','circuito 4×máx','3×15 deload'] },
+      { name:'Hollow hold', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/b09db486-86de-45e5-8d24-38bfc3212f39/generated-image-0b4f1528-e66f-477c-8533-065f64ae3321.png?view=open', w:['3×30s','3×40s','3×50s','3×50s','3×50s piernas juntas','3×60s','circuito 3×máx','3×35s deload'] },
+      { name:'Elevaciones de piernas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/972c1a3a-ba11-4397-855e-c4188d823ea1/generated-image-8b8321fb-ec79-4ee3-86ee-dbd9e615d3b5.png?view=open', w:['3×12','3×14','4×12','4×12','3×10 rectas','4×10 rectas','circuito 4×máx','3×12 deload'] },
+    ]},
+    { id:'d3', title:'Pierna', sub:'Cuádriceps · glúteo · gemelo · Jue', ex:[
+      { name:'Sentadillas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/e98b0a78-be60-446a-af19-af9471fc23c8/generated-image-383f7029-845b-41e2-b350-856e109b1e5f.png?view=open', w:['4×20','4×22','5×20','5×20','4×15 + salto','5×20','circuito 5×máx','4×20 deload'] },
+      { name:'Zancadas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/b835610a-27d0-49a6-86c3-923529068b43/generated-image-1dec1bc9-c634-4512-84de-a3864e6ccb0a.png?view=open', w:['3×12','3×14','4×12','4×12','3×12 caminando','4×12 caminando','circuito 4×máx','3×12 deload'] },
+      { name:'Sentadilla búlgara', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/c808b5b9-ec5f-4652-93d6-f140edb5cff5/generated-image-d37213e0-a62e-46e8-b4e4-93c4932987e5.png?view=open', w:['3×10','3×12','4×10','4×10','3×10 pausa','4×10','circuito 4×máx','3×10 deload'] },
+      { name:'Puente de glúteo', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/5671b3c9-5a88-487e-83fb-ce163492b66e/generated-image-ddb63d83-09e0-4c9d-9a7a-cfeff208f7fc.png?view=open', w:['3×15','3×17','4×15','4×15','3×12 a 1 pierna','4×12 a 1 pierna','circuito 4×máx','3×15 deload'] },
+      { name:'Gemelos de pie', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/90859e48-8b9c-43b7-bb72-d9b9645e08df/generated-image-0ea836f4-9208-461a-9983-530f3dca0269.png?view=open', w:['3×20','3×22','4×20','4×20','3×20 a 1 pierna','4×20 a 1 pierna','circuito 4×máx','3×20 deload'] },
+    ]},
+    { id:'d4', title:'Full body + cardio', sub:'Cuerpo entero · resistencia · Vie', ex:[
+      { name:'Burpees', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/5d6df535-cf35-4838-8662-422fe617bce5/generated-image-3ac2d4a1-1dad-487f-87d1-d3fb711d2b25.png?view=open', w:['4×10','4×12','5×10','5×10','4×12','5×12','circuito 5×máx','4×10 deload'] },
+      { name:'Mountain climbers', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/21410786-f5d1-4bac-9805-eec96edfeb38/generated-image-5b8d823c-db2e-4989-9f8d-e169cb88754a.png?view=open', w:['3×30s','3×40s','3×45s','3×45s','3×50s','3×50s','circuito 3×máx','3×30s deload'] },
+      { name:'Jumping jacks', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/494729ca-e1d7-46cf-bc67-19e62f1acedf/generated-image-609d6fe6-1dec-493f-a13e-461a8309f9e4.png?view=open', w:['3×40s','3×50s','3×60s','3×60s','3×60s','3×60s','circuito 3×máx','3×40s deload'] },
+      { name:'Sentadilla con salto', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/6cae760d-063d-4111-b67a-def11dcb490a/generated-image-89c7d3c0-b309-418e-9730-a1ef469c02c5.png?view=open', w:['3×12','3×14','4×12','4×12','3×15','4×15','circuito 4×máx','3×12 deload'] },
+      { name:'Sprints / carrera', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/f5395e85-91db-457b-9904-af341a4688aa/generated-image-23d4a79a-034b-4b97-b21c-6aa25c5e3548.png?view=open', w:['15-20 min','18-22 min','20-25 min','20-25 min +ritmo','22-25 min','25-30 min','intervalos HIIT','15 min suave deload'] },
+    ]},
+  ];
+
+  const EKEY = 'p68x_train_v1';
+  let eState = JSON.parse(localStorage.getItem(EKEY) || '{}');
+  let trWeek = parseInt(localStorage.getItem('p68x_trweek') || '0', 10);
+  let trDay = parseInt(localStorage.getItem('p68x_trday') || '0', 10);
+
+  const trWeekNav = document.getElementById('tr-week-chips');
+  weekMeta.forEach((m, i) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (i>=6?' peak':'') + (i===trWeek?' active':'');
+    b.textContent = 'S' + (i+1);
+    b.addEventListener('click', () => {
+      trWeek = i; localStorage.setItem('p68x_trweek', String(i));
+      trWeekNav.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      b.classList.add('active');
+      renderTrain();
+    });
+    trWeekNav.appendChild(b);
+  });
+
+  const trDayNav = document.getElementById('tr-day-chips');
+  const dayLabels = ['Día 1','Día 2','Día 3','Día 4'];
+  days.forEach((d, i) => {
+    const b = document.createElement('button');
+    b.className = 'chip day' + (i===trDay?' active':'');
+    b.textContent = dayLabels[i];
+    b.addEventListener('click', () => {
+      trDay = i; localStorage.setItem('p68x_trday', String(i));
+      trDayNav.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      b.classList.add('active');
+      renderTrain();
+    });
+    trDayNav.appendChild(b);
+  });
+
+  const trContent = document.getElementById('train-content');
+  function renderTrain() {
+    const wi = trWeek, di = trDay, m = weekMeta[wi], d = days[di];
+    let html = `<div class="week-banner"><div class="wb-top"><span class="wb-title">Semana ${wi+1}</span><span class="wb-date">${m.date}</span></div><div class="wb-focus">${m.focus}</div></div>`;
+    html += `<div class="day-head"><h2>${d.title}</h2><div class="sub">${d.sub}</div></div><ul class="ex">`;
+    d.ex.forEach((ex, ei) => {
+      const key = `w${wi}-${d.id}-${ei}`;
+      const done = eState[key] ? ' done' : '';
+      html += `<li class="li-ex${done}" data-key="${key}"><div class="thumb"><img src="${ex.img}" alt="${ex.name}"></div><div class="ex-body"><div class="ex-name">${ex.name}</div><span class="ex-vol">${ex.w[wi]}</span></div><span class="box">${CHECK}</span></li>`;
+    });
+    html += `</ul>`;
+    trContent.innerHTML = html;
+    trContent.querySelectorAll('.li-ex').forEach(li => {
+      li.addEventListener('click', () => {
+        li.classList.toggle('done');
+        eState[li.dataset.key] = li.classList.contains('done');
+        localStorage.setItem(EKEY, JSON.stringify(eState));
+        updateTrainProgress();
+      });
+    });
+    updateTrainProgress();
+  }
+  function updateTrainProgress() {
+    const wi = trWeek, di = trDay, d = days[di];
+    let done = 0;
+    d.ex.forEach((ex, ei) => { if (eState[`w${wi}-${d.id}-${ei}`]) done++; });
+    const pct = Math.round(done / d.ex.length * 100);
+    document.getElementById('pfill').style.width = pct + '%';
+    document.getElementById('ppct').textContent = pct + '%';
+    document.getElementById('pcount').textContent = `S${wi+1} · ${dayLabels[di]}: ${done}/${d.ex.length}`;
+  }
+  document.getElementById('reset-week').addEventListener('click', () => {
+    const wi = trWeek;
+    days.forEach(d => d.ex.forEach((ex, ei) => { delete eState[`w${wi}-${d.id}-${ei}`]; }));
+    localStorage.setItem(EKEY, JSON.stringify(eState));
+    renderTrain();
+  });
+  renderTrain();
+
+  // ============ DIET ============
+  const dayNames = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+  const dayShort = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const dayTags = [
+    {t:'Empuje',c:'work'},{t:'Tirón',c:'work'},{t:'Descanso',c:'rest'},
+    {t:'Pierna',c:'work'},{t:'Full body',c:'work'},{t:'Libre',c:'rest'},{t:'Prep',c:'rest'}
+  ];
+  const menuA = [
+    ['Avena con leche, yogur griego, plátano y canela','Pollo a la plancha, arroz integral y ensalada de tomate y pepino','Manzana + almendras','Tortilla de 3 huevos con espinacas y champiñones + pan integral'],
+    ['Tostadas integrales con aguacate y huevo poché','Salmón al horno, patata cocida y judías verdes con ajo','Yogur griego con arándanos y miel','Ensalada de garbanzos con atún, tomate y cebolla'],
+    ['Bol de yogur griego, avena, chía y frutos rojos','Pavo salteado con pimiento, calabacín y cebolla + quinoa','2 mandarinas + yogur natural','Merluza a la plancha con salteado de verdura'],
+    ['Tortitas de avena y clara con plátano','Ternera magra, boniato asado y ensalada verde','Tostada integral con pavo + nueces','Revuelto de gambas con espárragos y huevo'],
+    ['Yogur griego con granola, kiwi y semillas','Pollo al curry ligero con arroz basmati y verduras','Batido de plátano, leche y crema de cacahuete','Lubina al horno con calabacín, pimiento y cebolla'],
+    ['Huevos revueltos con tostada integral y aguacate','Comida libre: proteína + verdura, plancha sobre frito','Onza de chocolate negro','Ensalada completa con atún o pollo'],
+    ['Porridge de avena con manzana, canela y nueces','Lentejas guisadas con verduras (batch cooking)','Yogur griego con fruta de temporada','Pavo con puré de patata y ensalada'],
+  ];
+  const menuB = [
+    ['Yogur griego con avena, nueces y arándanos','Pavo a la plancha, quinoa y pisto de verduras','Plátano + puñado de anacardos','Salmón al horno con espárragos y patata'],
+    ['Revuelto de 2 huevos con espinacas + tostada','Pollo al horno, arroz basmati y ensalada mixta','Yogur natural con miel','Ensalada de lentejas con atún y huevo duro'],
+    ['Tostada integral con aguacate y tomate + café','Merluza a la plancha, patata y judías verdes','Manzana + almendras','Tortilla francesa de 3 huevos con jamón + pan'],
+    ['Porridge de avena con plátano y crema de cacahuete','Ternera magra salteada con pimientos y arroz','Yogur griego con kiwi','Gambas al ajillo con calabacín salteado'],
+    ['Bol de yogur, granola y frutos rojos','Pollo teriyaki ligero con basmati y verduras','Batido de leche, plátano y avena','Lubina con guarnición de verduras asadas'],
+    ['Huevos poché con aguacate sobre tostada','Comida libre: elige proteína + guarnición sana','2 onzas de chocolate negro','Ensalada templada de pollo y garbanzos'],
+    ['Tortitas de avena con arándanos','Guiso de garbanzos con verduras y pavo','Yogur con fruta','Salmón a la plancha con puré de patata'],
+  ];
+  const menuC = [
+    ['Avena con leche, semillas y fresas','Pollo a la plancha con boniato y ensalada','Manzana + nueces','Tortilla de espinacas y champiñones + pan integral'],
+    ['Yogur griego con granola y plátano','Atún fresco a la plancha, arroz integral y pimientos','Yogur con arándanos','Ensalada de garbanzos, huevo, tomate y cebolla'],
+    ['Tostada integral con pavo y aguacate','Pavo guisado con verduras y quinoa','2 mandarinas + almendras','Merluza al horno con calabacín y patata'],
+    ['Tortitas de avena y clara con canela','Ternera magra, patata cocida y judías verdes','Tostada con crema de cacahuete y plátano','Revuelto de gambas y espárragos'],
+    ['Bol de yogur, avena, kiwi y semillas','Pollo al curry con basmati y verduras salteadas','Batido de plátano y leche','Lubina al horno con pisto de verduras'],
+    ['Huevos revueltos con aguacate y tostada','Comida libre: prioriza proteína magra y verdura','Onza de chocolate negro','Ensalada completa con atún'],
+    ['Porridge con manzana y nueces','Lentejas con verduras y arroz (batch cooking)','Yogur griego con fruta','Pavo con puré de patata y ensalada verde'],
+  ];
+  const menuD = [
+    ['Yogur griego con avena, plátano y chía','Pollo asado con quinoa y ensalada de tomate','Plátano + almendras','Salmón con espárragos y boniato'],
+    ['Tostadas con huevo poché y aguacate','Pavo a la plancha, arroz integral y pimientos','Yogur con miel y arándanos','Ensalada de lentejas con atún y cebolla'],
+    ['Bol de avena, yogur y frutos rojos','Merluza a la plancha, patata y judías verdes','Manzana + nueces','Tortilla de 3 huevos con champiñones + pan'],
+    ['Tortitas de avena con crema de cacahuete','Ternera magra con boniato y ensalada verde','Yogur griego con kiwi','Gambas al ajillo con calabacín'],
+    ['Yogur con granola, semillas y kiwi','Pollo teriyaki con basmati y verduras','Batido de leche, avena y plátano','Lubina al horno con verduras asadas'],
+    ['Huevos revueltos con tostada y aguacate','Comida libre: plancha sobre frito, proteína alta','2 onzas de chocolate negro','Ensalada templada de pollo y garbanzos'],
+    ['Porridge de avena con manzana y canela','Guiso de garbanzos con pavo y verduras','Yogur con fruta de temporada','Salmón con puré de patata y ensalada'],
+  ];
+  const menuTemplates = [menuA, menuB, menuC, menuD];
+  const dietWeeks = [
+    { menu:0, kcal:'~1.950', prot:'130g', date:'21-27 jul', focus:'Arranque suave. Acostúmbrate a las cantidades y a comer proteína en cada comida.' },
+    { menu:1, kcal:'~1.950', prot:'130g', date:'28 jul-3 ago', focus:'Menú nuevo para no aburrirte. Mismas calorías, más variedad.' },
+    { menu:2, kcal:'~1.900', prot:'135g', date:'4-10 ago', focus:'Bajamos ~50 kcal y subimos algo de proteína al ganar entreno.' },
+    { menu:3, kcal:'~1.900', prot:'135g', date:'11-17 ago', focus:'Rotación de menú. Vigila las porciones de hidratos fuera del entreno.' },
+    { menu:0, kcal:'~1.850', prot:'135g', date:'18-24 ago', focus:'Recorte a ~1.850 kcal. Prioriza verdura para saciarte.' },
+    { menu:1, kcal:'~1.850', prot:'140g', date:'25-31 ago', focus:'Aguanta el déficit. Más proteína para proteger el músculo.' },
+    { menu:2, kcal:'~1.820', prot:'140g', date:'1-7 sep', focus:'Última vuelta de tuerca. Ajusta el capricho del sábado si hace falta.' },
+    { menu:3, kcal:'~1.900', prot:'135g', date:'8-13 sep', focus:'Semana meta: sube un poco las calorías, come limpio y llega definido.' },
+  ];
+  const mealLabels = [
+    {ico:'🌅', name:'Desayuno'}, {ico:'🍽️', name:'Comida'}, {ico:'🍎', name:'Snack'}, {ico:'🌙', name:'Cena'}
+  ];
+
+  let diWeek = parseInt(localStorage.getItem('p68x_diweek') || '0', 10);
+  let diDay = parseInt(localStorage.getItem('p68x_diday') || '0', 10);
+
+  const diWeekNav = document.getElementById('di-week-chips');
+  dietWeeks.forEach((m, i) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (i===7?' peak':'') + (i===diWeek?' active':'');
+    b.textContent = 'S' + (i+1);
+    b.addEventListener('click', () => {
+      diWeek = i; localStorage.setItem('p68x_diweek', String(i));
+      diWeekNav.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      b.classList.add('active');
+      renderDiet();
+    });
+    diWeekNav.appendChild(b);
+  });
+
+  const diDayNav = document.getElementById('di-day-chips');
+  dayShort.forEach((dn, i) => {
+    const b = document.createElement('button');
+    b.className = 'chip day' + (i===diDay?' active':'');
+    b.textContent = dn;
+    b.addEventListener('click', () => {
+      diDay = i; localStorage.setItem('p68x_diday', String(i));
+      diDayNav.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      b.classList.add('active');
+      renderDiet();
+    });
+    diDayNav.appendChild(b);
+  });
+
+  const diContent = document.getElementById('diet-content');
+  function renderDiet() {
+    const wi = diWeek, di = diDay, m = dietWeeks[wi], menu = menuTemplates[m.menu];
+    document.getElementById('dt-kcal').textContent = m.kcal;
+    document.getElementById('dt-prot').textContent = m.prot;
+    const tag = dayTags[di];
+    let html = `<div class="week-banner"><div class="wb-top"><span class="wb-title">Semana ${wi+1}</span><span class="wb-date">${m.date}</span></div><div class="wb-focus">${m.focus}</div></div>`;
+    html += `<div class="day-head"><h2>${dayNames[di]}</h2><span class="day-tag ${tag.c}">${tag.t}</span></div>`;
+    menu[di].forEach((what, mi) => {
+      const L = mealLabels[mi];
+      html += `<div class="meal"><div class="when">${L.ico} ${L.name}</div><div class="what">${what}</div></div>`;
+    });
+    diContent.innerHTML = html;
+  }
+  renderDiet();
+
+  // ============ TRACKER ============
+  const START = 73.8, GOAL = 68.0;
+  const weeks = [
+    { label: 'Inicio', date: '19 jul' }, { label: 'Semana 1', date: '26 jul' },
+    { label: 'Semana 2', date: '2 ago' }, { label: 'Semana 3', date: '9 ago' },
+    { label: 'Semana 4', date: '16 ago' }, { label: 'Semana 5', date: '23 ago' },
+    { label: 'Semana 6', date: '30 ago' }, { label: 'Semana 7', date: '6 sep' },
+    { label: 'Meta', date: '13 sep' },
+  ];
+  const target = weeks.map((w,i) => +(START - (START-GOAL)*(i/8)).toFixed(1));
+  const TKEY = 'p68x_track_v1';
+  let tData = JSON.parse(localStorage.getItem(TKEY) || '{}');
+  if (tData['0'] === undefined) tData['0'] = START;
+
+  const rowsEl = document.getElementById('rows');
+  function buildRows() {
+    rowsEl.innerHTML = '';
+    weeks.forEach((w, i) => {
+      const val = tData[i];
+      const prev = findPrev(i);
+      let deltaHtml = '<span class="delta flat">—</span>';
+      if (val !== undefined && prev !== null && prev.i !== i) {
+        const d = +(val - prev.val).toFixed(1);
+        const cls = d < 0 ? 'down' : d > 0 ? 'up' : 'flat';
+        const sign = d < 0 ? '' : d > 0 ? '+' : '';
+        deltaHtml = `<span class="delta ${cls}">${sign}${d.toString().replace('.',',')}</span>`;
+      }
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `<div class="wk">${w.label}<small>${w.date}</small></div><div class="target">meta<br>${target[i].toString().replace('.',',')}</div><input type="number" inputmode="decimal" step="0.1" placeholder="kg" data-i="${i}" value="${val !== undefined ? val : ''}">${deltaHtml}`;
+      rowsEl.appendChild(row);
+    });
+    rowsEl.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const i = inp.dataset.i;
+        const v = parseFloat(inp.value.replace(',','.'));
+        if (isNaN(v)) { delete tData[i]; } else { tData[i] = +v.toFixed(1); }
+        localStorage.setItem(TKEY, JSON.stringify(tData));
+        renderTracker();
+      });
+    });
+  }
+  function findPrev(i) { for (let j = i-1; j >= 0; j--) if (tData[j] !== undefined) return { i: j, val: tData[j] }; return null; }
+
+  const W = 620, H = 300, padL = 44, padR = 16, padT = 20, padB = 34;
+  function xp(i) { return padL + (W - padL - padR) * (i / 8); }
+  function line(pts) { return pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '); }
+  function renderChart() {
+    const svg = document.getElementById('chart');
+    const vals = Object.values(tData).map(Number);
+    const min = Math.min(...target, ...vals, GOAL) - 0.8;
+    const max = Math.max(...target, ...vals, START) + 0.8;
+    const r = { min, max };
+    const y = (v) => padT + (H - padT - padB) * (1 - (v - r.min) / (r.max - r.min));
+    let g = '';
+    for (let s = 0; s <= 4; s++) {
+      const v = r.min + (r.max - r.min) * (s/4);
+      const yy = y(v);
+      g += `<line x1="${padL}" y1="${yy}" x2="${W-padR}" y2="${yy}" stroke="oklch(90% 0.012 65)" stroke-width="1"/>`;
+      g += `<text x="${padL-8}" y="${yy+4}" text-anchor="end" font-size="11" fill="oklch(62% 0.015 55)" font-family="Inter">${v.toFixed(1).replace('.',',')}</text>`;
+    }
+    const gy = y(GOAL);
+    g += `<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="oklch(58% 0.11 155)" stroke-width="1.5" stroke-dasharray="2 4"/>`;
+    weeks.forEach((w,i) => { if (i % 2 === 0 || i === 8) g += `<text x="${xp(i)}" y="${H-12}" text-anchor="middle" font-size="10" fill="oklch(62% 0.015 55)" font-family="Inter">${i===0?'Inicio':i===8?'Meta':'S'+i}</text>`; });
+    const tpts = target.map((v,i)=>[xp(i), y(v)]);
+    g += `<path d="${line(tpts)}" fill="none" stroke="oklch(62% 0.015 55)" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round"/>`;
+    const rpts = [];
+    weeks.forEach((w,i)=>{ if (tData[i] !== undefined) rpts.push([xp(i), y(Number(tData[i]))]); });
+    if (rpts.length > 1) {
+      const area = line(rpts) + ` L ${rpts[rpts.length-1][0].toFixed(1)} ${(H-padB)} L ${rpts[0][0].toFixed(1)} ${(H-padB)} Z`;
+      g += `<path d="${area}" fill="oklch(64% 0.17 38 / 0.10)"/>`;
+      g += `<path d="${line(rpts)}" fill="none" stroke="oklch(64% 0.17 38)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    }
+    rpts.forEach(p => { g += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5" fill="oklch(99% 0.008 75)" stroke="oklch(64% 0.17 38)" stroke-width="3"/>`; });
+    svg.innerHTML = g;
+  }
+  function renderTracker() {
+    const entered = weeks.map((w,i)=>tData[i]).filter(v=>v!==undefined).map(Number);
+    const current = entered.length ? entered[entered.length-1] : START;
+    const lost = +(START - current).toFixed(1);
+    const left = +(current - GOAL).toFixed(1);
+    document.getElementById('s-now').textContent = current.toFixed(1).replace('.',',');
+    document.getElementById('s-lost').textContent = lost.toFixed(1).replace('.',',');
+    document.getElementById('s-left').textContent = (left>0?left:0).toFixed(1).replace('.',',');
+    buildRows(); renderChart();
+  }
+  document.getElementById('reset-track').addEventListener('click', () => {
+    tData = { '0': START }; localStorage.setItem(TKEY, JSON.stringify(tData));
+    renderTracker();
+  });
+  renderTracker();
+</script>
+</body>
+</html>
