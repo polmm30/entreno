@@ -51,6 +51,7 @@
         var credit = document.createElement('div');
         credit.className = 'design-ui-credit';
         credit.setAttribute('aria-hidden', 'true');
+        credit.innerHTML = '\u{1F49C} by ClickUp Brain';
         document.body.appendChild(credit);
 
         var timer = null;
@@ -136,6 +137,10 @@
   .week-banner .wb-title { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--clay-deep); }
   .week-banner .wb-date { font-size: 0.78rem; font-weight: 600; color: var(--clay-deep); font-variant-numeric: tabular-nums; }
   .week-banner .wb-focus { font-size: 0.9rem; color: var(--ink); margin-top: 4px; }
+  .lvl { display: inline-block; margin-top: 8px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 7px; }
+  .lvl.easy { background: var(--moss-tint); color: var(--moss-deep); }
+  .lvl.mid { background: var(--clay-tint); color: var(--clay-deep); }
+  .lvl.hard { background: var(--ink); color: var(--paper-2); }
 
   .day-head { margin: var(--space-md) 0 var(--space-sm); display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-sm); }
   .day-head h2 { font-size: 1.45rem; font-weight: 800; }
@@ -148,6 +153,8 @@
   ul.ex li { display: flex; align-items: center; gap: var(--space-sm); padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper-2); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.2s var(--ease-out), background 0.2s var(--ease-out); }
   ul.ex li:hover { border-color: var(--clay); }
   li.done { background: var(--moss-tint); border-color: transparent; }
+  li.cardio { background: oklch(96% 0.03 75); }
+  li.cardio.done { background: var(--moss-tint); }
   .thumb { flex: 0 0 84px; width: 84px; height: 64px; border-radius: 11px; overflow: hidden; background: var(--clay-tint); }
   .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.2s var(--ease-out); }
   li.done .thumb img { opacity: 0.55; }
@@ -173,11 +180,13 @@
   .meal:last-child { border-bottom: none; }
   .meal .when { display: flex; align-items: center; gap: 8px; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 1.02rem; }
   .meal .what { margin-top: 5px; font-size: 0.96rem; color: var(--ink-soft); }
+  .meal.tupper .when::after { content: "TUPPER"; font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; background: var(--clay); color: var(--paper-2); padding: 2px 7px; border-radius: 6px; }
 
   .targets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin-top: var(--space-md); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
   .targets div { background: var(--paper-2); padding: 13px 8px; text-align: center; }
   .targets .n { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.25rem; font-weight: 800; color: var(--clay-deep); font-variant-numeric: tabular-nums; line-height: 1; }
   .targets .l { font-size: 0.7rem; color: var(--ink-soft); margin-top: 5px; }
+  .allergy { margin-top: var(--space-sm); background: var(--moss-tint); border-radius: 12px; padding: 10px 14px; font-size: 0.82rem; color: oklch(38% 0.1 155); font-weight: 500; }
 
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); margin-top: var(--space-md); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
   .stats div { background: var(--paper-2); padding: 13px 6px; text-align: center; }
@@ -218,10 +227,10 @@
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">Por semana y por día</div>
+    <div class="eyebrow">Vuelta al deporte · progresión de fácil a difícil</div>
     <h1>Proyecto 68kg</h1>
     <div class="goal-row"><span class="from">73,8</span><span class="arrow">→</span><span class="to">68</span><span class="kg">kg</span></div>
-    <div class="deadline">🎯 Para el 13 de septiembre · elige semana, luego el día</div>
+    <div class="deadline">🎯 Para el 13 de septiembre · 6 ejercicios + 30 min andando con pendiente</div>
   </header>
 
   <nav id="tabs">
@@ -250,12 +259,13 @@
         <div><div class="n" id="dt-prot">130g</div><div class="l">proteína</div></div>
         <div><div class="n">2-2,5L</div><div class="l">agua</div></div>
       </div>
+      <div class="allergy">⚠️ Sin crustáceos (alergia) · sin coliflor ni brócoli · comidas de tupper sencillas</div>
       <div class="nav-label">Semana</div>
       <div class="sub-nav" id="di-week-chips"></div>
       <div class="nav-label">Día</div>
       <div class="sub-nav" id="di-day-chips"></div>
       <div id="diet-content"></div>
-      <div class="note">💡 <b>Cada semana rota el menú</b> y baja un poco las calorías. Sin coliflor ni brócoli. Intercambia comidas entre días si te apetece.</div>
+      <div class="note">🍱 <b>Pensada para tupper:</b> la comida del mediodía se prepara fácil y aguanta en la nevera. Cocina en tandas el domingo (arroz, pollo, legumbres) y montas los tuppers de la semana en 10 min.</div>
     </section>
 
     <section class="view" id="track">
@@ -278,7 +288,7 @@
     </section>
   </main>
 
-  <footer>Constancia &gt; perfección. <b>El entreno esculpe, el déficit adelgaza.</b></footer>
+  <footer>Constancia &gt; perfección. <b>Empieza suave, progresa siempre.</b></footer>
 </div>
 
 <script>
@@ -296,46 +306,58 @@
   }));
 
   // ============ TRAINING ============
+  const CARDIO = ['30 min con pendiente','30 min con pendiente','30 min con pendiente','30 min con pendiente','30 min con pendiente','30 min con pendiente','30 min con pendiente','30 min con pendiente'];
+  const lvlByWeek = ['easy','easy','mid','mid','hard','hard','hard','easy'];
+  const lvlLabel = { easy:'Nivel fácil', mid:'Nivel medio', hard:'Nivel avanzado' };
   const weekMeta = [
-    { date:'21-27 jul', focus:'Base. Aprende la técnica limpia y anota tus reps máximas.' },
-    { date:'28 jul-3 ago', focus:'Sube +2 reps por serie y +10s en los isométricos.' },
-    { date:'4-10 ago', focus:'+1 serie en los ejercicios principales.' },
-    { date:'11-17 ago', focus:'Descanso corto (45-60s) entre series y cardio más rápido.' },
-    { date:'18-24 ago', focus:'Variantes difíciles: diamante, dominada lenta, a una pierna.' },
-    { date:'25-31 ago', focus:'+1 serie extra y más cardio en el Día 4.' },
-    { date:'1-7 sep', focus:'Circuitos sin descanso. Máxima intensidad.' },
-    { date:'8-13 sep', focus:'Deload: baja volumen y llega fresco al objetivo.' },
+    { date:'21-27 jul', focus:'Vuelta al deporte: versiones fáciles y poco volumen. Coge técnica, sin machacarte.' },
+    { date:'28 jul-3 ago', focus:'Sigue suave, sube un par de reps. El cuerpo se readapta.' },
+    { date:'4-10 ago', focus:'Pasamos a las versiones estándar. Ya tienes base.' },
+    { date:'11-17 ago', focus:'Sube volumen y baja descansos.' },
+    { date:'18-24 ago', focus:'Empiezan las variantes difíciles. Aquí se nota el cambio.' },
+    { date:'25-31 ago', focus:'Más series y más intensidad. Vas fuerte.' },
+    { date:'1-7 sep', focus:'Circuitos sin descanso. Pico de intensidad.' },
+    { date:'8-13 sep', focus:'Descarga: baja volumen y llega fresco a la meta.' },
   ];
   const days = [
     { id:'d1', title:'Empuje', sub:'Pecho · hombro · tríceps · Lun', ex:[
-      { name:'Flexiones', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/e64acbf0-bccf-4260-be19-6d0558f0bd9f/generated-image-35aa7d72-7bac-42cb-ba34-482dcc5e2840.png?view=open', w:['4×máx','4×máx','5×máx','5×máx','4×8 diamante','5×8 diamante','circuito 5×máx','4×máx deload'] },
-      { name:'Fondos en silla', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/196396e6-ce73-4245-9100-54c3798fde65/generated-image-7f3570a9-6d75-406b-af2a-b671a696a685.png?view=open', w:['3×10-12','3×12-14','4×12','4×12','3×12 profundos','4×12 profundos','circuito 4×máx','3×12 deload'] },
-      { name:'Pike push-ups', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/01821e3e-037e-43f3-859e-ae0ef8e88d16/generated-image-8bb6e700-7d75-4f00-977e-1fe0297cc6b2.png?view=open', w:['3×8-10','3×10-12','4×10','4×10','3×8 pica alta','4×8 pica alta','circuito 4×máx','3×8 deload'] },
-      { name:'Plancha', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/cce93ff1-4d5b-406d-b676-c9320999fb08/generated-image-fd1383c4-a777-4520-8cb4-0dcb625b51a5.png?view=open', w:['3×40s','3×50s','3×60s','3×60s','3×60s peso','3×70s','circuito 3×máx','3×45s deload'] },
+      { name:'Flexiones', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/fc994c74-22e4-4bb8-adf7-d5a115687ae5/generated-image-1e2efe34-ee2c-4f24-aef7-3dfcaeea037e.png?view=open', w:['de rodillas 3×8','de rodillas 3×10','inclinadas 3×10','inclinadas 3×12','normales 4×8','normales 4×10','normales 5×máx','de rodillas 3×10'] },
+      { name:'Flexiones diamante (tríceps)', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/9e6b55b6-1779-4cb3-a2f4-be682fa132a9/generated-image-bdcf92de-74cd-4f31-987f-a0c1a9c6c308.png?view=open', w:['de rodillas 3×6','de rodillas 3×8','inclinadas 3×8','inclinadas 3×10','normales 3×8','normales 4×8','circuito 4×máx','de rodillas 3×8'] },
+      { name:'Flexiones declinadas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/07a42cc2-b6e4-4df4-a85d-1ffb2082c54d/generated-image-c61066e3-e910-4b37-89d1-fa6df80c9843.png?view=open', w:['manos elevadas 3×8','manos elevadas 3×10','normales 3×10','normales 3×12','pies en alto 3×8','pies en alto 3×10','pies en alto 4×máx','manos elevadas 3×10'] },
+      { name:'Fondos en silla', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/196396e6-ce73-4245-9100-54c3798fde65/generated-image-7f3570a9-6d75-406b-af2a-b671a696a685.png?view=open', w:['pies cerca 3×8','pies cerca 3×10','3×10-12','3×12','pies lejos 3×12','pies lejos 4×12','circuito 4×máx','pies cerca 3×10'] },
+      { name:'Press de hombro (mancuernas)', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/5f11b18c-b286-4d89-9523-2f4b21e3c83a/generated-image-e4a62eea-f299-4ae2-a84b-722c8204294d.png?view=open', w:['ligero 3×10','3×12','3×12','4×12','más peso 3×10','más peso 4×10','circuito 4×máx','ligero 3×12'] },
+      { name:'Plancha', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/cce93ff1-4d5b-406d-b676-c9320999fb08/generated-image-fd1383c4-a777-4520-8cb4-0dcb625b51a5.png?view=open', w:['3×20s','3×30s','3×40s','3×50s','3×60s','3×70s','circuito 3×máx','3×30s'] },
+      { name:'Andar con pendiente', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/f5395e85-91db-457b-9904-af341a4688aa/generated-image-23d4a79a-034b-4b97-b21c-6aa25c5e3548.png?view=open', w:CARDIO, cardio:true },
     ]},
     { id:'d2', title:'Tirón + core', sub:'Espalda · bíceps · abdomen · Mar', ex:[
-      { name:'Dominadas / remo', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/ea57fe74-12b1-4d01-8f53-f30a76ffb15a/generated-image-e42118bc-3cfa-4d9a-8161-975fb734172e.png?view=open', w:['4×máx','4×máx','5×máx','5×máx','4×5 lentas','5×5 lentas','circuito 5×máx','4×máx deload'] },
-      { name:'Superman', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/7146944a-84da-4d6a-bbfa-275ba1e87d7c/generated-image-715889b3-4c0a-47be-8291-f159e5b8597a.png?view=open', w:['3×15','3×17','4×15','4×15','3×15 pausa 2s','4×15 pausa 2s','circuito 4×máx','3×15 deload'] },
-      { name:'Hollow hold', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/b09db486-86de-45e5-8d24-38bfc3212f39/generated-image-0b4f1528-e66f-477c-8533-065f64ae3321.png?view=open', w:['3×30s','3×40s','3×50s','3×50s','3×50s piernas juntas','3×60s','circuito 3×máx','3×35s deload'] },
-      { name:'Elevaciones de piernas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/972c1a3a-ba11-4397-855e-c4188d823ea1/generated-image-8b8321fb-ec79-4ee3-86ee-dbd9e615d3b5.png?view=open', w:['3×12','3×14','4×12','4×12','3×10 rectas','4×10 rectas','circuito 4×máx','3×12 deload'] },
+      { name:'Remo / dominadas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/ea57fe74-12b1-4d01-8f53-f30a76ffb15a/generated-image-e42118bc-3cfa-4d9a-8161-975fb734172e.png?view=open', w:['remo en mesa 3×8','remo en mesa 3×10','remo bajo 4×8','remo bajo 4×10','negativas 4×5','asistidas 4×5','5×máx','remo en mesa 3×10'] },
+      { name:'Remo invertido', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/15bad3a8-5a16-49c7-982f-a87bf1256a0d/generated-image-639767f1-77a5-4aa9-af91-453aa29baa26.png?view=open', w:['barra alta 3×8','barra alta 3×10','3×10','3×12','barra baja 3×10','barra baja 4×10','circuito 4×máx','barra alta 3×10'] },
+      { name:'Curl de bíceps (mancuernas)', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/156830e7-3bea-4373-9746-6d55f886669e/generated-image-b0a0fe89-0669-435c-8edd-0c00c31b0d59.png?view=open', w:['ligero 3×10','3×12','3×12','4×12','más peso 3×12','más peso 4×12','circuito 4×máx','ligero 3×12'] },
+      { name:'Superman', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/7146944a-84da-4d6a-bbfa-275ba1e87d7c/generated-image-715889b3-4c0a-47be-8291-f159e5b8597a.png?view=open', w:['3×10','3×12','3×15','4×15','pausa 3×15','pausa 4×15','circuito 4×máx','3×12'] },
+      { name:'Hollow hold', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/47dc99b0-163d-45b1-b550-4ac438d3c78f/generated-image-deefd331-86f4-4848-981f-e9c3cde96ba3.png?view=open', w:['rodillas dobladas 3×20s','rodillas dobladas 3×30s','3×40s','3×50s','piernas rectas 3×40s','piernas rectas 3×60s','circuito 3×máx','3×30s'] },
+      { name:'Elevaciones de piernas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/972c1a3a-ba11-4397-855e-c4188d823ea1/generated-image-8b8321fb-ec79-4ee3-86ee-dbd9e615d3b5.png?view=open', w:['rodillas 3×10','rodillas 3×12','3×12','4×12','rectas 3×10','rectas 4×10','circuito 4×máx','3×12'] },
+      { name:'Andar con pendiente', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/f5395e85-91db-457b-9904-af341a4688aa/generated-image-23d4a79a-034b-4b97-b21c-6aa25c5e3548.png?view=open', w:CARDIO, cardio:true },
     ]},
     { id:'d3', title:'Pierna', sub:'Cuádriceps · glúteo · gemelo · Jue', ex:[
-      { name:'Sentadillas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/e98b0a78-be60-446a-af19-af9471fc23c8/generated-image-383f7029-845b-41e2-b350-856e109b1e5f.png?view=open', w:['4×20','4×22','5×20','5×20','4×15 + salto','5×20','circuito 5×máx','4×20 deload'] },
-      { name:'Zancadas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/b835610a-27d0-49a6-86c3-923529068b43/generated-image-1dec1bc9-c634-4512-84de-a3864e6ccb0a.png?view=open', w:['3×12','3×14','4×12','4×12','3×12 caminando','4×12 caminando','circuito 4×máx','3×12 deload'] },
-      { name:'Sentadilla búlgara', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/c808b5b9-ec5f-4652-93d6-f140edb5cff5/generated-image-d37213e0-a62e-46e8-b4e4-93c4932987e5.png?view=open', w:['3×10','3×12','4×10','4×10','3×10 pausa','4×10','circuito 4×máx','3×10 deload'] },
-      { name:'Puente de glúteo', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/5671b3c9-5a88-487e-83fb-ce163492b66e/generated-image-ddb63d83-09e0-4c9d-9a7a-cfeff208f7fc.png?view=open', w:['3×15','3×17','4×15','4×15','3×12 a 1 pierna','4×12 a 1 pierna','circuito 4×máx','3×15 deload'] },
-      { name:'Gemelos de pie', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/90859e48-8b9c-43b7-bb72-d9b9645e08df/generated-image-0ea836f4-9208-461a-9983-530f3dca0269.png?view=open', w:['3×20','3×22','4×20','4×20','3×20 a 1 pierna','4×20 a 1 pierna','circuito 4×máx','3×20 deload'] },
+      { name:'Sentadillas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/e98b0a78-be60-446a-af19-af9471fc23c8/generated-image-383f7029-845b-41e2-b350-856e109b1e5f.png?view=open', w:['3×12','3×15','4×15','4×20','5×20','5×20 + salto','circuito 5×máx','3×15'] },
+      { name:'Sentadilla sumo', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/db90044d-7663-4f53-8f13-12fbc4c3c8e4/generated-image-e8f3a2ac-607f-474e-9f99-68dd9241b16d.png?view=open', w:['3×12','3×15','3×15','4×15','pausa 3×15','pausa 4×15','circuito 4×máx','3×12'] },
+      { name:'Zancadas', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/b835610a-27d0-49a6-86c3-923529068b43/generated-image-1dec1bc9-c634-4512-84de-a3864e6ccb0a.png?view=open', w:['estáticas 3×8','estáticas 3×10','3×10','3×12','caminando 3×12','caminando 4×12','circuito 4×máx','estáticas 3×10'] },
+      { name:'Sentadilla búlgara', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/c808b5b9-ec5f-4652-93d6-f140edb5cff5/generated-image-d37213e0-a62e-46e8-b4e4-93c4932987e5.png?view=open', w:['con apoyo 3×8','3×10','3×10','4×10','pausa 3×10','4×10','circuito 4×máx','con apoyo 3×8'] },
+      { name:'Puente de glúteo', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/5671b3c9-5a88-487e-83fb-ce163492b66e/generated-image-ddb63d83-09e0-4c9d-9a7a-cfeff208f7fc.png?view=open', w:['3×12','3×15','4×15','4×15','a 1 pierna 3×10','a 1 pierna 4×12','circuito 4×máx','3×15'] },
+      { name:'Gemelos de pie', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/90859e48-8b9c-43b7-bb72-d9b9645e08df/generated-image-0ea836f4-9208-461a-9983-530f3dca0269.png?view=open', w:['3×15','3×20','4×20','4×20','a 1 pierna 3×15','a 1 pierna 4×20','circuito 4×máx','3×20'] },
+      { name:'Andar con pendiente', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/f5395e85-91db-457b-9904-af341a4688aa/generated-image-23d4a79a-034b-4b97-b21c-6aa25c5e3548.png?view=open', w:CARDIO, cardio:true },
     ]},
     { id:'d4', title:'Full body + cardio', sub:'Cuerpo entero · resistencia · Vie', ex:[
-      { name:'Burpees', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/5d6df535-cf35-4838-8662-422fe617bce5/generated-image-3ac2d4a1-1dad-487f-87d1-d3fb711d2b25.png?view=open', w:['4×10','4×12','5×10','5×10','4×12','5×12','circuito 5×máx','4×10 deload'] },
-      { name:'Mountain climbers', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/21410786-f5d1-4bac-9805-eec96edfeb38/generated-image-5b8d823c-db2e-4989-9f8d-e169cb88754a.png?view=open', w:['3×30s','3×40s','3×45s','3×45s','3×50s','3×50s','circuito 3×máx','3×30s deload'] },
-      { name:'Jumping jacks', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/494729ca-e1d7-46cf-bc67-19e62f1acedf/generated-image-609d6fe6-1dec-493f-a13e-461a8309f9e4.png?view=open', w:['3×40s','3×50s','3×60s','3×60s','3×60s','3×60s','circuito 3×máx','3×40s deload'] },
-      { name:'Sentadilla con salto', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/6cae760d-063d-4111-b67a-def11dcb490a/generated-image-89c7d3c0-b309-418e-9730-a1ef469c02c5.png?view=open', w:['3×12','3×14','4×12','4×12','3×15','4×15','circuito 4×máx','3×12 deload'] },
-      { name:'Sprints / carrera', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/f5395e85-91db-457b-9904-af341a4688aa/generated-image-23d4a79a-034b-4b97-b21c-6aa25c5e3548.png?view=open', w:['15-20 min','18-22 min','20-25 min','20-25 min +ritmo','22-25 min','25-30 min','intervalos HIIT','15 min suave deload'] },
+      { name:'Burpees', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/5d6df535-cf35-4838-8662-422fe617bce5/generated-image-3ac2d4a1-1dad-487f-87d1-d3fb711d2b25.png?view=open', w:['sin salto 3×8','sin salto 3×10','4×8','4×10','completos 4×10','completos 5×10','circuito 5×máx','sin salto 3×8'] },
+      { name:'Mountain climbers', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/21410786-f5d1-4bac-9805-eec96edfeb38/generated-image-5b8d823c-db2e-4989-9f8d-e169cb88754a.png?view=open', w:['3×20s','3×30s','3×40s','3×45s','3×50s','3×50s','circuito 3×máx','3×30s'] },
+      { name:'Jumping jacks', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/494729ca-e1d7-46cf-bc67-19e62f1acedf/generated-image-609d6fe6-1dec-493f-a13e-461a8309f9e4.png?view=open', w:['3×30s','3×40s','3×50s','3×60s','3×60s','3×60s','circuito 3×máx','3×40s'] },
+      { name:'Sentadilla con salto', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/6cae760d-063d-4111-b67a-def11dcb490a/generated-image-89c7d3c0-b309-418e-9730-a1ef469c02c5.png?view=open', w:['media 3×10','media 3×12','3×12','4×12','3×15','4×15','circuito 4×máx','media 3×10'] },
+      { name:'Comba (saltar la cuerda)', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/9b5bcab2-9538-4f72-82ca-9ba1c47fa581/generated-image-fd0beb40-27d4-48c5-b1e8-aa7a6522c201.png?view=open', w:['3×30s','3×45s','3×60s','3×75s','3×90s','4×90s','circuito 3×máx','3×45s'] },
+      { name:'Andar con pendiente', img:'https://t90151812462.p.clickup-attachments.com/t90151812462/f5395e85-91db-457b-9904-af341a4688aa/generated-image-23d4a79a-034b-4b97-b21c-6aa25c5e3548.png?view=open', w:CARDIO, cardio:true },
     ]},
   ];
 
-  const EKEY = 'p68x_train_v1';
+  const EKEY = 'p68x_train_v5';
   let eState = JSON.parse(localStorage.getItem(EKEY) || '{}');
   let trWeek = parseInt(localStorage.getItem('p68x_trweek') || '0', 10);
   let trDay = parseInt(localStorage.getItem('p68x_trday') || '0', 10);
@@ -372,12 +394,14 @@
   const trContent = document.getElementById('train-content');
   function renderTrain() {
     const wi = trWeek, di = trDay, m = weekMeta[wi], d = days[di];
-    let html = `<div class="week-banner"><div class="wb-top"><span class="wb-title">Semana ${wi+1}</span><span class="wb-date">${m.date}</span></div><div class="wb-focus">${m.focus}</div></div>`;
+    const lvl = lvlByWeek[wi];
+    let html = `<div class="week-banner"><div class="wb-top"><span class="wb-title">Semana ${wi+1}</span><span class="wb-date">${m.date}</span></div><div class="wb-focus">${m.focus}</div><span class="lvl ${lvl}">${lvlLabel[lvl]}</span></div>`;
     html += `<div class="day-head"><h2>${d.title}</h2><div class="sub">${d.sub}</div></div><ul class="ex">`;
     d.ex.forEach((ex, ei) => {
       const key = `w${wi}-${d.id}-${ei}`;
       const done = eState[key] ? ' done' : '';
-      html += `<li class="li-ex${done}" data-key="${key}"><div class="thumb"><img src="${ex.img}" alt="${ex.name}"></div><div class="ex-body"><div class="ex-name">${ex.name}</div><span class="ex-vol">${ex.w[wi]}</span></div><span class="box">${CHECK}</span></li>`;
+      const cardioCls = ex.cardio ? ' cardio' : '';
+      html += `<li class="li-ex${cardioCls}${done}" data-key="${key}"><div class="thumb"><img src="${ex.img}" alt="${ex.name}"></div><div class="ex-body"><div class="ex-name">${ex.cardio ? '🚶 ' : ''}${ex.name}</div><span class="ex-vol">${ex.w[wi]}</span></div><span class="box">${CHECK}</span></li>`;
     });
     html += `</ul>`;
     trContent.innerHTML = html;
@@ -408,7 +432,7 @@
   });
   renderTrain();
 
-  // ============ DIET ============
+  // ============ DIET (tupper-friendly) ============
   const dayNames = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
   const dayShort = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
   const dayTags = [
@@ -416,40 +440,40 @@
     {t:'Pierna',c:'work'},{t:'Full body',c:'work'},{t:'Libre',c:'rest'},{t:'Prep',c:'rest'}
   ];
   const menuA = [
-    ['Avena con leche, yogur griego, plátano y canela','Pollo a la plancha, arroz integral y ensalada de tomate y pepino','Manzana + almendras','Tortilla de 3 huevos con espinacas y champiñones + pan integral'],
-    ['Tostadas integrales con aguacate y huevo poché','Salmón al horno, patata cocida y judías verdes con ajo','Yogur griego con arándanos y miel','Ensalada de garbanzos con atún, tomate y cebolla'],
-    ['Bol de yogur griego, avena, chía y frutos rojos','Pavo salteado con pimiento, calabacín y cebolla + quinoa','2 mandarinas + yogur natural','Merluza a la plancha con salteado de verdura'],
-    ['Tortitas de avena y clara con plátano','Ternera magra, boniato asado y ensalada verde','Tostada integral con pavo + nueces','Revuelto de gambas con espárragos y huevo'],
-    ['Yogur griego con granola, kiwi y semillas','Pollo al curry ligero con arroz basmati y verduras','Batido de plátano, leche y crema de cacahuete','Lubina al horno con calabacín, pimiento y cebolla'],
-    ['Huevos revueltos con tostada integral y aguacate','Comida libre: proteína + verdura, plancha sobre frito','Onza de chocolate negro','Ensalada completa con atún o pollo'],
-    ['Porridge de avena con manzana, canela y nueces','Lentejas guisadas con verduras (batch cooking)','Yogur griego con fruta de temporada','Pavo con puré de patata y ensalada'],
+    ['Avena con leche, yogur y plátano','Pollo al horno + arroz + pisto (tanda del domingo)','Manzana + almendras','Tortilla de espinacas + pan integral'],
+    ['Tostadas con aguacate y huevo','Salmón al horno + patata cocida + judías verdes','Yogur griego con arándanos','Ensalada de garbanzos con atún'],
+    ['Yogur con avena y frutos rojos','Pavo + quinoa + verduras salteadas (tanda)','2 mandarinas + yogur','Merluza al horno con verdura'],
+    ['Tortitas de avena y clara','Ternera magra + boniato + ensalada','Tostada con pavo + nueces','Revuelto de huevos con pavo'],
+    ['Yogur con granola y kiwi','Pollo al curry con arroz basmati','Batido de plátano y crema de cacahuete','Lubina al horno con verduras'],
+    ['Huevos revueltos con aguacate','Comida libre: proteína + verdura','Onza de chocolate negro','Ensalada completa con atún'],
+    ['Porridge con manzana y nueces','Lentejas con verduras (batch cooking semanal)','Yogur con fruta','Pavo con puré de patata y ensalada'],
   ];
   const menuB = [
-    ['Yogur griego con avena, nueces y arándanos','Pavo a la plancha, quinoa y pisto de verduras','Plátano + puñado de anacardos','Salmón al horno con espárragos y patata'],
-    ['Revuelto de 2 huevos con espinacas + tostada','Pollo al horno, arroz basmati y ensalada mixta','Yogur natural con miel','Ensalada de lentejas con atún y huevo duro'],
-    ['Tostada integral con aguacate y tomate + café','Merluza a la plancha, patata y judías verdes','Manzana + almendras','Tortilla francesa de 3 huevos con jamón + pan'],
-    ['Porridge de avena con plátano y crema de cacahuete','Ternera magra salteada con pimientos y arroz','Yogur griego con kiwi','Gambas al ajillo con calabacín salteado'],
-    ['Bol de yogur, granola y frutos rojos','Pollo teriyaki ligero con basmati y verduras','Batido de leche, plátano y avena','Lubina con guarnición de verduras asadas'],
-    ['Huevos poché con aguacate sobre tostada','Comida libre: elige proteína + guarnición sana','2 onzas de chocolate negro','Ensalada templada de pollo y garbanzos'],
-    ['Tortitas de avena con arándanos','Guiso de garbanzos con verduras y pavo','Yogur con fruta','Salmón a la plancha con puré de patata'],
+    ['Yogur con avena, nueces y arándanos','Pavo + quinoa + pisto (tanda)','Plátano + anacardos','Salmón al horno con patata'],
+    ['Revuelto de 2 huevos + tostada','Pollo al horno + arroz + ensalada','Yogur natural con miel','Ensalada de lentejas con atún y huevo'],
+    ['Tostada con aguacate y tomate','Merluza al horno + patata + judías verdes','Manzana + almendras','Tortilla de 3 huevos con jamón + pan'],
+    ['Porridge con plátano y crema de cacahuete','Ternera magra + arroz + pimientos','Yogur griego con kiwi','Pollo al ajillo con calabacín'],
+    ['Yogur con granola y frutos rojos','Pollo teriyaki + basmati + verduras','Batido de leche, plátano y avena','Lubina con verduras asadas'],
+    ['Huevos poché con aguacate','Comida libre: proteína + guarnición sana','2 onzas de chocolate negro','Ensalada templada de pollo y garbanzos'],
+    ['Tortitas de avena con arándanos','Guiso de garbanzos con pavo (batch)','Yogur con fruta','Salmón + puré de patata'],
   ];
   const menuC = [
-    ['Avena con leche, semillas y fresas','Pollo a la plancha con boniato y ensalada','Manzana + nueces','Tortilla de espinacas y champiñones + pan integral'],
-    ['Yogur griego con granola y plátano','Atún fresco a la plancha, arroz integral y pimientos','Yogur con arándanos','Ensalada de garbanzos, huevo, tomate y cebolla'],
-    ['Tostada integral con pavo y aguacate','Pavo guisado con verduras y quinoa','2 mandarinas + almendras','Merluza al horno con calabacín y patata'],
-    ['Tortitas de avena y clara con canela','Ternera magra, patata cocida y judías verdes','Tostada con crema de cacahuete y plátano','Revuelto de gambas y espárragos'],
-    ['Bol de yogur, avena, kiwi y semillas','Pollo al curry con basmati y verduras salteadas','Batido de plátano y leche','Lubina al horno con pisto de verduras'],
-    ['Huevos revueltos con aguacate y tostada','Comida libre: prioriza proteína magra y verdura','Onza de chocolate negro','Ensalada completa con atún'],
-    ['Porridge con manzana y nueces','Lentejas con verduras y arroz (batch cooking)','Yogur griego con fruta','Pavo con puré de patata y ensalada verde'],
+    ['Avena con leche y fresas','Pollo + boniato + ensalada (tanda)','Manzana + nueces','Tortilla de espinacas + pan integral'],
+    ['Yogur con granola y plátano','Atún + arroz integral + pimientos','Yogur con arándanos','Ensalada de garbanzos, huevo y tomate'],
+    ['Tostada con pavo y aguacate','Pavo guisado con quinoa y verduras','2 mandarinas + almendras','Merluza al horno con patata'],
+    ['Tortitas de avena y clara','Ternera magra + patata + judías verdes','Tostada con crema de cacahuete y plátano','Revuelto de huevos con pavo y espárragos'],
+    ['Yogur con avena y kiwi','Pollo al curry + basmati + verduras','Batido de plátano y leche','Lubina al horno con pisto'],
+    ['Huevos revueltos con aguacate','Comida libre: proteína magra y verdura','Onza de chocolate negro','Ensalada completa con atún'],
+    ['Porridge con manzana y nueces','Lentejas con verduras y arroz (batch)','Yogur con fruta','Pavo + puré de patata + ensalada'],
   ];
   const menuD = [
-    ['Yogur griego con avena, plátano y chía','Pollo asado con quinoa y ensalada de tomate','Plátano + almendras','Salmón con espárragos y boniato'],
-    ['Tostadas con huevo poché y aguacate','Pavo a la plancha, arroz integral y pimientos','Yogur con miel y arándanos','Ensalada de lentejas con atún y cebolla'],
-    ['Bol de avena, yogur y frutos rojos','Merluza a la plancha, patata y judías verdes','Manzana + nueces','Tortilla de 3 huevos con champiñones + pan'],
-    ['Tortitas de avena con crema de cacahuete','Ternera magra con boniato y ensalada verde','Yogur griego con kiwi','Gambas al ajillo con calabacín'],
-    ['Yogur con granola, semillas y kiwi','Pollo teriyaki con basmati y verduras','Batido de leche, avena y plátano','Lubina al horno con verduras asadas'],
-    ['Huevos revueltos con tostada y aguacate','Comida libre: plancha sobre frito, proteína alta','2 onzas de chocolate negro','Ensalada templada de pollo y garbanzos'],
-    ['Porridge de avena con manzana y canela','Guiso de garbanzos con pavo y verduras','Yogur con fruta de temporada','Salmón con puré de patata y ensalada'],
+    ['Yogur con avena, plátano y chía','Pollo asado + quinoa + ensalada (tanda)','Plátano + almendras','Salmón + boniato'],
+    ['Tostadas con huevo y aguacate','Pavo + arroz integral + pimientos','Yogur con miel y arándanos','Ensalada de lentejas con atún'],
+    ['Yogur con avena y frutos rojos','Merluza al horno + patata + judías verdes','Manzana + nueces','Tortilla de 3 huevos con champiñones + pan'],
+    ['Tortitas de avena con crema de cacahuete','Ternera magra + boniato + ensalada','Yogur griego con kiwi','Pollo al ajillo con calabacín'],
+    ['Yogur con granola y kiwi','Pollo teriyaki + basmati + verduras','Batido de leche, avena y plátano','Lubina al horno con verduras'],
+    ['Huevos revueltos con aguacate','Comida libre: proteína alta + verdura','2 onzas de chocolate negro','Ensalada templada de pollo y garbanzos'],
+    ['Porridge con manzana y canela','Guiso de garbanzos con pavo (batch)','Yogur con fruta','Salmón + puré de patata + ensalada'],
   ];
   const menuTemplates = [menuA, menuB, menuC, menuD];
   const dietWeeks = [
@@ -507,7 +531,8 @@
     html += `<div class="day-head"><h2>${dayNames[di]}</h2><span class="day-tag ${tag.c}">${tag.t}</span></div>`;
     menu[di].forEach((what, mi) => {
       const L = mealLabels[mi];
-      html += `<div class="meal"><div class="when">${L.ico} ${L.name}</div><div class="what">${what}</div></div>`;
+      const isTupper = mi === 1 && di < 5;
+      html += `<div class="meal${isTupper ? ' tupper' : ''}"><div class="when">${L.ico} ${L.name}</div><div class="what">${what}</div></div>`;
     });
     diContent.innerHTML = html;
   }
